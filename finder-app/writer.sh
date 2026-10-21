@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -lt 2 ]; then
-    echo -e "Erro: Argumentos faltando...\nUso: $0 <writefile> <writestr>"
+    echo "Error: Missing arguments. Usage: $0 <writefile> <writestr>" >&2
     exit 1
 fi
 
@@ -10,29 +10,16 @@ writestr=$2
 
 writedir=$(dirname "$writefile")
 
-
 if [ ! -d "$writedir" ]; then
-
-    echo -n "Diretório $writedir não existe, deseja criá-lo? (s/n) >> "
-    read resposta
-
-    if [ "$resposta" = "s" ]; then
-        mkdir -p "$writedir"
-    else
-        echo "Operação cancelada."
-        exit 1
-    fi
-
+    mkdir -p "$writedir"
     if [ $? -ne 0 ]; then
-        echo "Erro: Não foi possível criar o diretório '$writedir'."
+        echo "Error: Could not create directory '$writedir'." >&2
         exit 1
     fi
 fi
 
 echo "$writestr" > "$writefile"
 if [ $? -ne 0 ]; then
-    echo "Erro: Não foi possível criar o arquivo '$writefile'."
+    echo "Error: Could not create or write to file '$writefile'." >&2
     exit 1
 fi
-
-echo "Arquivo '$writefile' criado com sucesso."
